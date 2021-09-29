@@ -17,6 +17,7 @@
 
 package com.example.android.marsrealestate.overview
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -41,6 +42,10 @@ class OverviewViewModel : ViewModel() {
     val response: LiveData<String>
         get() = _response
 
+    private val _property = MutableLiveData<MarsProperty>()
+    val property: LiveData<MarsProperty>
+    get() = _property
+
     /**
      * Call getMarsRealEstateProperties() on init so we can display status immediately.
      */
@@ -57,6 +62,11 @@ class OverviewViewModel : ViewModel() {
             try {
                 val listResult = MarsApi.retrofitService.getProperties()
                 _response.value = "${listResult.size} Esse e o valor recebido"
+                Log.i("OverviewViewModel", "response value ${listResult.size}")
+                if(listResult.size > 0){
+                    Log.i("OverviewViewModel", "resultado ${listResult[0].imgSrcUrl}")
+                    _property.value = listResult[0]
+                }
 
             }catch (e: Exception){
                 _response.value = "Failure: ${e.message}"
