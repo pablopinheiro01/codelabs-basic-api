@@ -55,6 +55,7 @@ class OverviewFragment : Fragment() {
         binding.photosGrid.adapter = PhotoGridAdapter()
 
         setHasOptionsMenu(true)
+
         return binding.root
     }
 
