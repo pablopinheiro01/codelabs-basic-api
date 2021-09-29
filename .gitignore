@@ -1,3 +1,5 @@
 /app/
 gradle
 *.gradle
+.idea
+build
