@@ -25,9 +25,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.android.marsrealestate.network.MarsApi
 import com.example.android.marsrealestate.network.MarsProperty
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.lang.Exception
 
 /**
@@ -42,9 +39,9 @@ class OverviewViewModel : ViewModel() {
     val response: LiveData<String>
         get() = _response
 
-    private val _property = MutableLiveData<MarsProperty>()
-    val property: LiveData<MarsProperty>
-    get() = _property
+    private val _properties = MutableLiveData<List<MarsProperty>>()
+    val properties: LiveData<List<MarsProperty>>
+    get() = _properties
 
     /**
      * Call getMarsRealEstateProperties() on init so we can display status immediately.
@@ -60,14 +57,8 @@ class OverviewViewModel : ViewModel() {
 
         viewModelScope.launch {
             try {
-                val listResult = MarsApi.retrofitService.getProperties()
-                _response.value = "${listResult.size} Esse e o valor recebido"
-                Log.i("OverviewViewModel", "response value ${listResult.size}")
-                if(listResult.size > 0){
-                    Log.i("OverviewViewModel", "resultado ${listResult[0].imgSrcUrl}")
-                    _property.value = listResult[0]
-                }
-
+                _properties.value = MarsApi.retrofitService.getProperties()
+                _response.value = "Success: Mars properties retrieved"
             }catch (e: Exception){
                 _response.value = "Failure: ${e.message}"
             }
